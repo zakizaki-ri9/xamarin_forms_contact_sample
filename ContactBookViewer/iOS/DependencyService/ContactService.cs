@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.IO;
 
-using ContactBookViewer.Interface;
+using ContactBookViewer.DependencyService;
 using ContactBookViewer.Model;
 using ContactBookViewer.iOS.DependencyService;
 
@@ -12,10 +12,10 @@ using Foundation;
 
 using Xamarin.Forms;
 
-[assembly: Dependency(typeof(ContactOperation))]
+[assembly: Dependency(typeof(ContactService))]
 namespace ContactBookViewer.iOS.DependencyService
 {
-    public class ContactOperation : IContactOperation
+    public class ContactService : IContact
     {
         public ObservableCollection<Contact> GetContactList()
         {
@@ -63,9 +63,9 @@ namespace ContactBookViewer.iOS.DependencyService
         /// </summary>
         /// <returns>'/'区切りの電話番号文字列</returns>
         /// <param name="list">CNContact.PhoneNumbers</param>
-        private string GetTel(CNLabeledValue<CNPhoneNumber>[] list)
+        private ObservableCollection<string> GetTel(CNLabeledValue<CNPhoneNumber>[] list)
         {
-            string result = string.Empty;
+            ObservableCollection<string> result = new ObservableCollection<string>();
 
             if(list != null)
             {
@@ -74,7 +74,7 @@ namespace ContactBookViewer.iOS.DependencyService
                     string telNumber = (tel != null && tel.Value != null ? tel.Value.StringValue : string.Empty);
                     if(!string.IsNullOrEmpty(telNumber))
                     {
-                        result += (string.IsNullOrEmpty(result) ? telNumber : "/" + telNumber);
+                        result.Add(telNumber);
                     }
                 }
             }
@@ -87,9 +87,9 @@ namespace ContactBookViewer.iOS.DependencyService
         /// </summary>
         /// <returns>'/'区切りのメールアドレス</returns>
         /// <param name="list">CNContact.EmailAddresses</param>
-        private string GetEmail(CNLabeledValue<NSString>[] list)
+        private ObservableCollection<string> GetEmail(CNLabeledValue<NSString>[] list)
         {
-            string result = string.Empty;
+            ObservableCollection<string> result = new ObservableCollection<string>();
 
             if (list != null)
             {
@@ -97,7 +97,7 @@ namespace ContactBookViewer.iOS.DependencyService
                 {
                     if (email != null && !string.IsNullOrEmpty(email.Value))
                     {
-                        result += (string.IsNullOrEmpty(result) ? email.Value : "/" + email.Value);
+                        result.Add(email.Value);
                     }
                 }
             }

@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using ContactBookViewer.Model;
 
-namespace ContactBookViewer.Interface
+namespace ContactBookViewer.DependencyService
 {
     public interface IToast
     {

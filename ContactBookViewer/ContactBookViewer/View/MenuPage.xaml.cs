@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using ContactBookViewer.Interface;
+using ContactBookViewer.DependencyService;
 
 using Xamarin.Forms;
 
@@ -16,7 +16,7 @@ namespace ContactBookViewer.View
 
         private void contactButton_Clicked(object sender, EventArgs e)
         {
-            var contactOperation = DependencyService.Get<IContactOperation>();
+            var contactOperation = Xamarin.Forms.DependencyService.Get<IContact>();
             if(contactOperation != null)
             {
                 var list = contactOperation.GetContactList();

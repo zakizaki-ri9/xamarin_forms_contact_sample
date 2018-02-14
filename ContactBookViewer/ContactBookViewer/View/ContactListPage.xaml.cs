@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using Xamarin.Forms;
 
 using ContactBookViewer.Model;
-using ContactBookViewer.Interface;
+using ContactBookViewer.DependencyService;
 
 using PCLStorage;
 using Newtonsoft.Json;
@@ -38,7 +38,7 @@ namespace ContactBookViewer.View
             await file.WriteAllTextAsync(jsonString);
 
             // トーストで通知
-            IToast toastService = DependencyService.Get<IToast>();
+            IToast toastService = Xamarin.Forms.DependencyService.Get<IToast>();
             if(toastService != null)
             {
                 toastService.Show($"{file.Path} の出力が完了しました。");

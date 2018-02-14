@@ -19,10 +19,15 @@ namespace ContactBookViewer.View
         {
             InitializeComponent();
 
+            Func<ObservableCollection<string>, string> getFirstItem = (target) =>
+            {
+                return (target != null && target.Count > 0 ? target[0] : string.Empty);
+            };
+
             ObservableCollection<DetailModel> list = new ObservableCollection<DetailModel>();
             list.Add(new DetailModel() { Text = contact.Name, Detail = contact.Kana });
-            list.Add(new DetailModel() { Text = contact.Tel, Detail = string.Empty });
-            list.Add(new DetailModel() { Text = contact.Email, Detail = string.Empty });
+            list.Add(new DetailModel() { Text = getFirstItem(contact.Tel), Detail = string.Empty });
+            list.Add(new DetailModel() { Text = getFirstItem(contact.Email), Detail = string.Empty });
 
             DataTemplate cell = new DataTemplate(typeof(TextCell));
             cell.SetBinding(TextCell.TextProperty, "Text");

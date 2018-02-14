@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.IO;
 
-using ContactBookViewer.Interface;
+using ContactBookViewer.DependencyService;
 using ContactBookViewer.Model;
 using ContactBookViewer.Droid.DependencyService;
 
@@ -18,7 +18,7 @@ namespace ContactBookViewer.Droid.DependencyService
         public void Show(string message)
         {
             Toast.MakeText(
-                Forms.Context,
+                Android.App.Application.Context,
                 message,
                 ToastLength.Short).Show();
         }

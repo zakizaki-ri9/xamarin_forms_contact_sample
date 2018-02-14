@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.IO;
 
-using ContactBookViewer.Interface;
+using ContactBookViewer.DependencyService;
 using ContactBookViewer.Model;
 using ContactBookViewer.Droid.DependencyService;
 
@@ -11,24 +11,30 @@ using Android.Provider;
 
 using Xamarin.Forms;
 
-[assembly: Dependency(typeof(ContactOperation))]
+[assembly: Dependency(typeof(ContactService))]
 namespace ContactBookViewer.Droid.DependencyService
 {
-    public class ContactOperation : IContactOperation
+    public class ContactService : IContact
     {
+        /// <summary>
+        /// アドレス帳取得
+        /// </summary>
+        /// <returns></returns>
         public ObservableCollection<Contact> GetContactList()
         {
             ObservableCollection<Contact> list = new ObservableCollection<Contact>();
 
+            // アドレス帳から取得する名前を指定
             string[] projection = 
             {
-                ContactsContract.Contacts.InterfaceConsts.Id,
-                ContactsContract.Contacts.InterfaceConsts.DisplayName,
-                ContactsContract.Contacts.InterfaceConsts.PhoneticName,
+                ContactsContract.Contacts.InterfaceConsts.Id,   // ID(おそらくアドレス帳一意となる値)
+                ContactsContract.Contacts.InterfaceConsts.DisplayName,  // 名前
+                ContactsContract.Contacts.InterfaceConsts.PhoneticName, // 読みがな
             };
 
             // アクティビティ取得
-            var activity = Forms.Context;
+            //  Forms.Context から取得すると警告が発生するため、以下で取得するほうが良さそう
+            var activity = Android.App.Application.Context;
 
             // アクティビティが取得できた場合にクエリ発行
             if(activity != null)
@@ -66,11 +72,11 @@ namespace ContactBookViewer.Droid.DependencyService
         /// 電話番号取得
         /// </summary>
         /// <param name="id">ContactId</param>
-        /// <param name="cr">Forms.Context.ContentResolver</param>
+        /// <param name="cr">Android.App.Application.Context.ContentResolver</param>
         /// <returns>'/'区切りの電話番号文字列</returns>
-        private string GetTel(string id, ContentResolver cr)
+        private ObservableCollection<string> GetTel(string id, ContentResolver cr)
         {
-            string result = string.Empty;
+            ObservableCollection<string> result = new ObservableCollection<string>();
 
             var cursor = cr.Query(
                 ContactsContract.CommonDataKinds.Phone.ContentUri,
@@ -88,7 +94,7 @@ namespace ContactBookViewer.Droid.DependencyService
                     val = cursor.GetString(cursor.GetColumnIndex(ContactsContract.CommonDataKinds.Phone.Number));
                     if(!string.IsNullOrEmpty(val))
                     {
-                        result += (string.IsNullOrEmpty(result) ? val : "/" + val);
+                        result.Add(val);
                     }
                 }
             }
@@ -100,11 +106,11 @@ namespace ContactBookViewer.Droid.DependencyService
         /// メールアドレス取得
         /// </summary>
         /// <param name="id">ContactId</param>
-        /// <param name="cr">Forms.Context.ContentResolver</param>
+        /// <param name="cr">Android.App.Application.Context.ContentResolver</param>
         /// <returns>'/'区切りのメールアドレス文字列</returns>
-        private string GetEmail(string id, ContentResolver cr)
+        private ObservableCollection<string> GetEmail(string id, ContentResolver cr)
         {
-            string result = string.Empty;
+            ObservableCollection<string> result = new ObservableCollection<string>();
 
             var cursor = cr.Query(
                 ContactsContract.CommonDataKinds.Email.ContentUri,
@@ -122,7 +128,7 @@ namespace ContactBookViewer.Droid.DependencyService
                     val = cursor.GetString(cursor.GetColumnIndex(ContactsContract.CommonDataKinds.Email.Address));
                     if (!string.IsNullOrEmpty(val))
                     {
-                        result += (string.IsNullOrEmpty(result) ? val : "/" + val);
+                        result.Add(val);
                     }
                 }
             }

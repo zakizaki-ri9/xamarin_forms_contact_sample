@@ -51,14 +51,14 @@
       <DependentUpon>MenuPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model\Contact.cs" />
-    <Compile Include="Interface\IContactOperation.cs" />
+    <Compile Include="DependencyService\IContact.cs" />
     <Compile Include="View\ContactListPage.xaml.cs">
       <DependentUpon>ContactListPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ContactDetailPage.xaml.cs">
       <DependentUpon>ContactDetailPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Interface\IToast.cs" />
+    <Compile Include="DependencyService\IToast.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="PCLStorage.Abstractions">
@@ -85,7 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="View\" />
-    <Folder Include="Interface\" />
+    <Folder Include="DependencyService\" />
     <Folder Include="Model\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
